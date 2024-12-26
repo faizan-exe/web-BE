@@ -4,6 +4,7 @@ const User = require('../models/User');
 
 exports.register = async (req, res) => {
     const { name, email, password, role } = req.body;
+    
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -27,7 +28,8 @@ exports.login = async (req, res) => {
         if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
         const payload = { id: user.id, role: user.role };
-        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign(payload, "somesecret123", { expiresIn: '1h' });
+
 
         res.status(200).json({ token });
     } catch (error) {
