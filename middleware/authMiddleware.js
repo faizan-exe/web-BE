@@ -2,14 +2,14 @@ const jwt = require('jsonwebtoken');
 const roles = require('../utils/roles');
 
 const authenticate = (req, res, next) => {
-    const token =  req.headers['Authorization']?.split(' ')[1];
-    
+    let token = req.header('Authorization');
+    token = token.replace('Bearer ', '');
     if (!token) return res.status(401).json({ message: 'No token, authorization denied' });
 
     try {
         const decoded = jwt.verify(token, "somesecret123");
-        console.log("decoded token:",decoded);
         req.user = decoded;
+
         next();
     } catch (err) {
         res.status(401).json({ message: 'Token is not valid' });

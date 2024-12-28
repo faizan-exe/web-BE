@@ -1,5 +1,5 @@
 const User = require('../models/User');
-
+const Ads = require('../models/Ads');
 exports.getWomen = async (req, res) => {
     try {
         const women = await User.find({ role: 'woman' });
@@ -8,6 +8,8 @@ exports.getWomen = async (req, res) => {
         res.status(500).json({ message: 'Server error', error });
     }
 };
+
+exports.getMentorAds 
 
 exports.createAds = async (req, res) => {
   try {
@@ -22,6 +24,9 @@ exports.createAds = async (req, res) => {
 
     // Get ad details from the request body
     const {
+      mentorName,
+      contactEmail,
+      contactPhone,
       services,
       description,
       image,
@@ -37,10 +42,12 @@ exports.createAds = async (req, res) => {
     }
 
     // Create a new ad
-    const newAd = new Ad({
+    const newAd = new Ads({
       mentor: userId, // Associate the ad with the mentor's user ID
       mentorName: user.name, // Optionally include the mentor's name
       services,
+      contactEmail,
+      contactPhone,
       description,
       image,
       experience,

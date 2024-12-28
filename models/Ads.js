@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const mentorSchema = new mongoose.Schema({
+const AdsSchema = new mongoose.Schema({
   mentorName: { type: String, required: false },
   services: { type: String, required: true },
   description: { type: String, required: true },
@@ -14,4 +14,4 @@ const mentorSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }, // Optional: Track when the mentor profile was created
 });
 
-module.exports = mongoose.model('Mentor', mentorSchema);
+module.exports = mongoose.model('Ad', AdsSchema);
