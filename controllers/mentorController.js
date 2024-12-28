@@ -83,3 +83,62 @@ exports.createAds = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+exports.editAds = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const adId = req.params.id;  // Assuming the ad ID is passed as a URL parameter
+
+    // Find the ad by its ID
+    const ad = await Ads.findById(adId);
+
+    if (!ad) {
+      return res.status(404).json({ message: 'Ad not found.' });
+    }
+
+    // Ensure the user is the mentor who created the ad
+    if (ad.mentor.toString() !== userId) {
+      return res.status(403).json({ message: 'You are not authorized to edit this ad.' });
+    }
+
+    // Update the ad with the new details from the request body
+    const {
+      mentorName,
+      contactEmail,
+      contactPhone,
+      services,
+      description,
+      image,
+      experience,
+      location,
+      availableSlots,
+      priceRange,
+    } = req.body;
+
+    // Validate required fields
+    if (!services || !description || !location || !priceRange) {
+      return res.status(400).json({ message: 'Required fields are missing.' });
+    }
+
+    // Update the ad fields
+    ad.services = services || ad.services;
+    ad.contactEmail = contactEmail || ad.contactEmail;
+    ad.contactPhone = contactPhone || ad.contactPhone;
+    ad.mentorName = mentorName || ad.mentorName;
+    ad.description = description || ad.description;
+    ad.image = image || ad.image;
+    ad.experience = experience || ad.experience;
+    ad.location = location || ad.location;
+    ad.availableSlots = availableSlots || ad.availableSlots;
+    ad.priceRange = priceRange || ad.priceRange;
+
+    // Save the updated ad
+    const updatedAd = await ad.save();
+
+    // Respond with the updated ad
+    res.status(200).json({ message: 'Ad updated successfully', ad: updatedAd });
+  } catch (error) {
+    console.error('Error updating ad:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
