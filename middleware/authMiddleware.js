@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken');
 const roles = require('../utils/roles');
 
 const authenticate = (req, res, next) => {
-    const token = req.header('Authorization');
+    const token =  req.headers['Authorization']?.split(' ')[1];
+    
     if (!token) return res.status(401).json({ message: 'No token, authorization denied' });
 
     try {
