@@ -49,3 +49,37 @@ exports.getUser = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 }
+
+exports.updateUserProfile = async (req, res) => {
+    try {
+      const { name, email, role, image } = req.body;  // Get user data from request body
+      const userId = req.user.id;
+  
+      // Validate inputs
+      if (!userId) {
+        return res.status(400).json({ message: 'User ID is required' });
+      }
+  
+      // Find the user by ID and update their profile
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      user.name = name || user.name;
+      user.email = email || user.email;
+      user.role = role || user.role;
+      user.image = image || user.image;  // If no new image, retain the old image
+  
+      // Save updated user profile
+      await user.save();
+  
+      res.status(200).json({
+        message: 'Profile updated successfully',
+        user: user,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error', error: error.message });
+    }
+  };
