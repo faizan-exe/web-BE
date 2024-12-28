@@ -7,6 +7,7 @@ const authenticate = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, "somesecret123");
+        console.log("decoded token:",decoded);
         req.user = decoded;
         next();
     } catch (err) {
