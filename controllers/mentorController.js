@@ -9,11 +9,28 @@ exports.getWomen = async (req, res) => {
     }
 };
 
-exports.getMentorAds 
+exports.getMentorAds = async (req, res) => {
+  try {
+    // Extract user info from the request (e.g., from a middleware that adds the user to req.user)
+    const userId = req.user.id;
+
+    // Find the mentor ads associated with the userId
+    const ads = await Ads.find({ mentor: userId });
+
+    if (!ads || ads.length === 0) {
+      return res.status(404).json({ message: 'No ads found for this mentor.' });
+    }
+
+    // Respond with the list of ads
+    res.status(200).json({ ads });
+  } catch (error) {
+    console.error('Error fetching ads:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
 
 exports.createAds = async (req, res) => {
   try {
-    // Extract user info from the request (e.g., from a middleware that adds the user to req.user)
     const userId = req.user.id;
 
     // Find the user and verify their role is 'mentor'

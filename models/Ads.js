@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const AdsSchema = new mongoose.Schema({
   mentorName: { type: String, required: false },
+  mentor: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   services: { type: String, required: true },
   description: { type: String, required: true },
   contactEmail: { type: String, required: true, match: /.+\@.+\..+/ }, // Valid email format
