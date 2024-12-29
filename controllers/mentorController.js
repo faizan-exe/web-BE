@@ -72,7 +72,7 @@ exports.createAds = async (req, res) => {
       contactEmail,
       contactPhone,
       description,
-      image, // Save the image URL sent from the frontend
+      image,
       experience,
       location,
       availableSlots,
@@ -123,6 +123,7 @@ exports.editAds = async (req, res) => {
     if (!services || !description || !location || !priceRange) {
       return res.status(400).json({ message: 'Required fields are missing.' });
     }
+    console.log(req.body);
 
     // Update the ad fields
     ad.services = services || ad.services;
