@@ -12,6 +12,15 @@ exports.getWomen = async (req, res) => {
     }
 };
 
+exports.getAllAds = async (req, res) => {
+  try {
+    const ads = await Ads.find();
+    res.status(200).json(ads);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+};
+
 exports.getMentorAds = async (req, res) => {
   try {
     // Extract user info from the request (e.g., from a middleware that adds the user to req.user)

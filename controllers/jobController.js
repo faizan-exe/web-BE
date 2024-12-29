@@ -69,14 +69,17 @@ exports.getJobs = async (req, res) => {
     }
 };
 
-exports.getUserJobs = async (req, res) => {
+exports.getAllJobs = async (req, res) => {
     try {
-        const jobs = await Job.find({ postedBy : req.user.id});
+        const jobs = await Job.find();
+        if (!jobs) {
+            return res.status(404).json({ message: 'No jobs found' });
+        }
         res.status(200).json(jobs);
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });
     }
-};
+}
 
 exports.deleteJob = async (req, res) => {
     try {
