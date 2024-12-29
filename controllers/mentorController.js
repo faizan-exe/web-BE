@@ -147,3 +147,30 @@ exports.editAds = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+exports.deleteAds = async (req, res) => {
+  try {
+    const userId = req.user.id;  
+    const adId = req.params.id; 
+
+    // Find the ad by its ID
+    const ad = await Ads.findById(adId);
+
+    if (!ad) {
+      return res.status(404).json({ message: 'Ad not found.' });
+    }
+
+    // Ensure the user is the mentor who created the ad
+    if (ad.mentor.toString() !== userId) {
+      return res.status(403).json({ message: 'You are not authorized to delete this ad.' });
+    }
+
+    // Delete the ad
+    await ad.deleteOne();
+
+    res.status(200).json({ message: 'Ad deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting ad:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
